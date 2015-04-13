@@ -4,71 +4,55 @@ disableSerialization;
 
 /*
 	File: fn_statusBar.sqf
-	Author: Osef (Ported to EpochMod by piX)
-	Edited by: [piX]
-	Description: Puts a small bar in the bottom centre of screen to display in-game information
 	
-
-
-	Modified by: ScaRR
-	Description: Modified status bar to display player Krypto, Next Server restart time based on real_date.dll from Kilzone Kid
-				 (which can be found at http://killzonekid.com/arma-extension-real_date-dll-v3-0/)
-				 and display the Thirst, Hunger and damage as percentages.
-				 Added colouring to the status bar elements, that changes gradually depending on the percentages.
-				 Added flashing of the values if values are within a certain threshold
-				 
-	Modified by: Darth_Rogue  4/11/15
-	Description:  Added admin section to display real-time server FPS and world space coords
-				  Modified health, food and drink values to display from a starting point of 100% instead of starting at 0%
-				  Removed Hex color scheme and went to a hard coded method easier for folks to understand and edit colors
-				  Removed restart timer due to multiple glitches (divide by 0 errors with certain time zones)
-				  Added second section to hpp file to provide properly aligned background for players vs. admin menus
-				  Added GRIDREF display for players
+				  
+	As of 4/13/15 see Github page for updated changelog and credits  https://github.com/DarthRogue/Status_Bar/tree/master
 	
 	PLEASE KEEP CREDITS - THEY ARE DUE TO THOSE WHO PUT IN THE EFFORT!	
 */
 
-if ((getPlayerUID player) in [
-"XXXXXXXXXXXXXXXXXX" //admins id goes here
-                                                                 
-]) then { 
+if ((getPlayerUID player) in admin_list) then 
+{ 
 
 
-_rscLayer = "osefStatusBarAdmin" call BIS_fnc_rscLayer;
-_rscLayer cutRsc["osefStatusBarAdmin","PLAIN"];
-systemChat format["Loading Admin info...", _rscLayer];
-[] spawn {
+	_rscLayer = "osefStatusBarAdmin" call BIS_fnc_rscLayer;
+	_rscLayer cutRsc["osefStatusBarAdmin","PLAIN"];
+	systemChat format["Loading Admin info...", _rscLayer];
+	[] spawn 
+	{
 
-	sleep 5;
-	//set the color values.
-	//Additional color codes can be found here:  http://html-color-codes.com/
-	_colourDefault 	= parseText "#adadad"; //set your default colour here
-	_colour100 		= parseText "#336600";
-	_colour90 		= parseText "#339900";
-	_colour80 		= parseText "#33CC00";
-	_colour70 		= parseText "#33FF00";
-	_colour60 		= parseText "#66FF00";
-	_colour50 		= parseText "#CCFF00";
-	_colour40 		= parseText "#CCCC00";
-	_colour30 		= parseText "#CC9900";
-	_colour20 		= parseText "#CC6600";
-	_colour10 		= parseText "#CC3300";
-	_colour0 		= parseText "#CC0000";
-	_colourDead 	= parseText "#000000";
-	_uid = getPlayerUID player;	
+		sleep 5;
+		//set the color values.
+		//Additional color codes can be found here:  http://html-color-codes.com/
+		_colourDefault 	= parseText "#adadad"; //set your default colour here
+		_colour100 		= parseText "#336600";
+		_colour90 		= parseText "#339900";
+		_colour80 		= parseText "#33CC00";
+		_colour70 		= parseText "#33FF00";
+		_colour60 		= parseText "#66FF00";
+		_colour50 		= parseText "#CCFF00";
+		_colour40 		= parseText "#CCCC00";
+		_colour30 		= parseText "#CC9900";
+		_colour20 		= parseText "#CC6600";
+		_colour10 		= parseText "#CC3300";
+		_colour0 		= parseText "#CC0000";
+		_colourDead 	= parseText "#000000";
+		_uid = getPlayerUID player;	
 	
 		
-	while {true} do {
+	while {true} do 
+	{
 	
 		sleep 1;
 				
 		//moved the creation of the status bar inside the loop and create it if it is null,
 		//this is to handle instance where the status bar is disappearing 
-		if(isNull ((uiNamespace getVariable "osefStatusBarAdmin")displayCtrl 55554)) then{
-				diag_log "statusbar is null create";
-				disableSerialization;
-				_rscLayer = "osefStatusBarAdmin" call BIS_fnc_rscLayer;
-				_rscLayer cutRsc["osefStatusBarAdmin","PLAIN"];
+		if(isNull ((uiNamespace getVariable "osefStatusBarAdmin")displayCtrl 55554)) then
+		{
+			diag_log "statusbar is null create";
+			disableSerialization;
+			_rscLayer = "osefStatusBarAdmin" call BIS_fnc_rscLayer;
+			_rscLayer cutRsc["osefStatusBarAdmin","PLAIN"];
 		};		
 		
 		//initialize variables and set values
@@ -84,9 +68,28 @@ systemChat format["Loading Admin info...", _rscLayer];
 		_serverFPS = if (typeName EPOCH_diag_fps == "SCALAR") then [{EPOCH_diag_fps},{"MANIPULATED"}],
 		_pos = getPosATL player;
 		_dir = getDir (vehicle player);
+		_grid = mapGridPosition  player; _xx = (format[_grid]) select  [0,3]; 
+		_yy = (format[_grid]) select  [3,3];  
+		_time = (round(240-(serverTime)/60));  //edit the '240' value (60*4=240) to change the countdown timer if your server restarts are shorter or longer than 4 hour intervals
+		_hours = (floor(_time/60));
+		_minutes = (_time - (_hours * 60));
+		
+		switch(_minutes) do
+	{
+		case 9: {_minutes = "09"};
+		case 8: {_minutes = "08"};
+		case 7: {_minutes = "07"};
+		case 6: {_minutes = "06"};
+		case 5: {_minutes = "05"};
+		case 4: {_minutes = "04"};
+		case 3: {_minutes = "03"};
+		case 2: {_minutes = "02"};
+		case 1: {_minutes = "01"};
+		case 0: {_minutes = "00"};
+	};
 		
 		//Colour coding
-		//			Damage
+		//Damage
 			
 		_colourDamage = _colourDefault;
 		if(_damage >= 100) then{_colourDamage = _colour100;};
@@ -104,7 +107,7 @@ systemChat format["Loading Admin info...", _rscLayer];
 		
 		
 		
-		//				Hunger
+		//Hunger
 		_colourHunger = _colourDefault;
 		if(_hunger >= 100) then{_colourHunger = _colour100;};
 		if((_hunger >= 90) && (_hunger < 100)) then {_colourHunger =  _colour90;};
@@ -120,7 +123,7 @@ systemChat format["Loading Admin info...", _rscLayer];
 		if(_hunger < 1) then{_colourHunger =  _colourDead;};
 		
 		
-		//				Thirst
+		//Thirst
 		_colourThirst = _colourDefault;		
 		if(_thirst >= 100) then{_colourThirst = _colour100;};
 		if((_thirst >= 90) && (_thirst < 100)) then {_colourThirst =  _colour90;};
@@ -136,8 +139,7 @@ systemChat format["Loading Admin info...", _rscLayer];
 		if(_thirst < 1) then{_colourThirst =  _colourDead;};
 		
 		
-		//				Energy
-		
+		//Energy
 		_colourEnergy = _colourDefault;
 		if(_energyPercent >= 100) then{_colourEnergy = _colour100;};
 		if((_energyPercent >= 90) && (_energyPercent < 100)) then {_colourEnergy =  _colour90;};
@@ -152,8 +154,8 @@ systemChat format["Loading Admin info...", _rscLayer];
 		if((_energyPercent >= 1) && (_energyPercent < 10)) then {_colourEnergy =  _colour0;};
 		if(_energyPercent < 1) then{_colourEnergy =  _colour0;};
 		
-		//				Stamina
 		
+		//Stamina
 		_colourStamina = _colourDefault;
 		
 		//display the information 
@@ -168,7 +170,8 @@ systemChat format["Loading Admin info...", _rscLayer];
 			<t shadow='1' shadowColor='#000000' color='%14'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\energy.paa' color='%14'/>%8%1</t> 
 			<t shadow='1' shadowColor='#000000' color='%10'>FPS: %7</t>
 			<t shadow='1' shadowColor='#000000' color='%10'>POS: %16</t>
-			<t shadow='1' shadowColor='#000000' color='%10'>DIR: %17</t>",
+			<t shadow='1' shadowColor='#000000' color='%10'>DIR: %17</t>
+			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\restart.paa' color='%10'/>%18:%19</t>",
 					"%", 
 					count playableUnits,
 					_damage,
@@ -184,48 +187,54 @@ systemChat format["Loading Admin info...", _rscLayer];
 					_colourThirst,
 					_colourEnergy,
 					_colourStamina,
-					_pos, 
-					_dir
+					format["%1/%2",_xx,_yy], 
+					_dir,
+					_hours,
+					_minutes
 					 
 				];
 		
 		}; 
 };
-} else {
-_rscLayer = "osefStatusBar" call BIS_fnc_rscLayer;
-_rscLayer cutRsc["osefStatusBar","PLAIN"];
-systemChat format["Loading Player info...", _rscLayer];
-[] spawn {
+} else 
+{
+	_rscLayer = "osefStatusBar" call BIS_fnc_rscLayer;
+	_rscLayer cutRsc["osefStatusBar","PLAIN"];
+	systemChat format["Loading Player info...", _rscLayer];
+	[] spawn 
+	{
 
-	sleep 5;
-	//set the color values.
-	//Additional color codes can be found here:  http://html-color-codes.com/
-	_colourDefault = parseText "#adadad"; //set your default colour here
-	_colour100 		= parseText "#336600";
-	_colour90 		= parseText "#339900";
-	_colour80 		= parseText "#33CC00";
-	_colour70 		= parseText "#33FF00";
-	_colour60 		= parseText "#66FF00";
-	_colour50 		= parseText "#CCFF00";
-	_colour40 		= parseText "#CCCC00";
-	_colour30 		= parseText "#CC9900";
-	_colour20 		= parseText "#CC6600";
-	_colour10 		= parseText "#CC3300";
-	_colour0 		= parseText "#CC0000";
-	_colourDead 	= parseText "#000000";
-	_uid = getPlayerUID player;
+		sleep 5;
+		//set the color values.
+		//Additional color codes can be found here:  http://html-color-codes.com/
+		_colourDefault = parseText "#adadad"; //set your default colour here
+		_colour100 		= parseText "#336600";
+		_colour90 		= parseText "#339900";
+		_colour80 		= parseText "#33CC00";
+		_colour70 		= parseText "#33FF00";
+		_colour60 		= parseText "#66FF00";
+		_colour50 		= parseText "#CCFF00";
+		_colour40 		= parseText "#CCCC00";
+		_colour30 		= parseText "#CC9900";
+		_colour20 		= parseText "#CC6600";
+		_colour10 		= parseText "#CC3300";
+		_colour0 		= parseText "#CC0000";
+		_colourDead 	= parseText "#000000";
+		_uid = getPlayerUID player;
 	
 	
-	while {true} do {
+	while {true} do 
+	{
 		sleep 1;
 				
 		//moved the creation of the status bar inside the loop and create it if it is null,
 		//this is to handle instance where the status bar is disappearing 
-		if(isNull ((uiNamespace getVariable "osefStatusBar")displayCtrl 55555)) then{
-				diag_log "statusbar is null create";
-				disableSerialization;
-				_rscLayer = "osefStatusBar" call BIS_fnc_rscLayer;
-				_rscLayer cutRsc["osefStatusBar","PLAIN"];
+		if(isNull ((uiNamespace getVariable "osefStatusBar")displayCtrl 55555)) then
+		{
+			diag_log "statusbar is null create";
+			disableSerialization;
+			_rscLayer = "osefStatusBar" call BIS_fnc_rscLayer;
+			_rscLayer cutRsc["osefStatusBar","PLAIN"];
 		};		
 		
 		//initialize variables and set values
@@ -241,12 +250,27 @@ systemChat format["Loading Player info...", _rscLayer];
 		_fps = format["%1", diag_fps];
 		_grid = mapGridPosition  player; _xx = (format[_grid]) select  [0,3]; 
 		_yy = (format[_grid]) select  [3,3];  
+		_time = (round(240-(serverTime)/60));  //edit the '240' value (60*4=240) to change the countdown timer if your server restarts are shorter or longer than 4 hour intervals
+		_hours = (floor(_time/60));
+		_minutes = (_time - (_hours * 60));
 		
+		switch(_minutes) do
+	{
+		case 9: {_minutes = "09"};
+		case 8: {_minutes = "08"};
+		case 7: {_minutes = "07"};
+		case 6: {_minutes = "06"};
+		case 5: {_minutes = "05"};
+		case 4: {_minutes = "04"};
+		case 3: {_minutes = "03"};
+		case 2: {_minutes = "02"};
+		case 1: {_minutes = "01"};
+		case 0: {_minutes = "00"};
+	};
 						
 		
 		//Colour coding
-		//			Damage
-			
+		//Damage
 		_colourDamage = _colourDefault;
 		if(_damage >= 100) then{_colourDamage = _colour100;};
 		if((_damage >= 90) && (_damage < 100)) then {_colourDamage =  _colour90;};
@@ -262,8 +286,7 @@ systemChat format["Loading Player info...", _rscLayer];
 		if(_damage < 1) then{_colourDamage =  _colourDead;};
 		
 		
-		
-		//				Hunger
+		//Hunger
 		_colourHunger = _colourDefault;
 		if(_hunger >= 100) then{_colourHunger = _colour100;};
 		if((_hunger >= 90) && (_hunger < 100)) then {_colourHunger =  _colour90;};
@@ -279,7 +302,7 @@ systemChat format["Loading Player info...", _rscLayer];
 		if(_hunger < 1) then{_colourHunger =  _colourDead;};
 		
 		
-		//				Thirst
+		//Thirst
 		_colourThirst = _colourDefault;		
 		if(_thirst >= 100) then{_colourThirst = _colour100;};
 		if((_thirst >= 90) && (_thirst < 100)) then {_colourThirst =  _colour90;};
@@ -295,8 +318,7 @@ systemChat format["Loading Player info...", _rscLayer];
 		if(_thirst < 1) then{_colourThirst =  _colourDead;};
 		
 		
-		//				Energy
-		
+		//Energy
 		_colourEnergy = _colourDefault;
 		if(_energyPercent >= 100) then{_colourEnergy = _colour100;};
 		if((_energyPercent >= 90) && (_energyPercent < 100)) then {_colourEnergy =  _colour90;};
@@ -311,8 +333,8 @@ systemChat format["Loading Player info...", _rscLayer];
 		if((_energyPercent >= 1) && (_energyPercent < 10)) then {_colourEnergy =  _colour0;};
 		if(_energyPercent < 1) then{_colourEnergy =  _colour0;};
 		
-		//				Stamina
 		
+		//Stamina
 		_colourStamina = _colourDefault;
 		
 		//display the information 
@@ -326,7 +348,8 @@ systemChat format["Loading Player info...", _rscLayer];
 			<t shadow='1' shadowColor='#000000' color='%15'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\stamina.paa' color='%16'/>%9</t>
 			<t shadow='1' shadowColor='#000000' color='%14'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\energy.paa' color='%14'/>%8%1</t> 
 			<t shadow='1' shadowColor='#000000' color='%10'>FPS: %7</t>
-			<t shadow='1' shadowColor='#000000' color='%10'>GRIDREF: %16</t>",
+			<t shadow='1' shadowColor='#000000' color='%10'>GRIDREF: %16</t>
+			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\restart.paa' color='%10'/>%17:%18</t>",
 					"%", 
 					count playableUnits,
 					_damage,
@@ -342,7 +365,9 @@ systemChat format["Loading Player info...", _rscLayer];
 					_colourThirst,
 					_colourEnergy,
 					_colourStamina,
-					format["%1/%2",_xx,_yy]
+					format["%1/%2",_xx,_yy],
+					_hours,
+					_minutes
 				];
 		
 		

@@ -14,9 +14,9 @@ class osefStatusBarAdmin {
 	class controls {
 		class statusBarText {
 			idc = 55554;
-			x = safezoneX + safezoneW - 2;
+			x = safezoneX + safezoneW - 2.0;
 			y = safezoneY + safezoneH - 0.1;
-			w = 1.6;
+			w = 1.5;
 			h = 0.07;
 			shadow = 2;
 			colorBackground[] = { 0, 0, 0, 0.5 };  // uncomment and increase 4th number to have a background
