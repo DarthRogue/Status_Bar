@@ -1,46 +1,53 @@
 # Status_Bar
-Player Status Bar with Icons v 1.1
+Player Status Bar with Icons v 1.2
 
 ChangeLog:
-
+1.2
+ - [Added] Toxicity display
+ - [Added] Switch to turn the world space coords on or off for admins
+ - [Changed] Separated files to make editing of different bar types (player/admin/admin with world space) more clear and less prone to mistake
+ - [Changed] Realigned the bar for the added toxicity display
+ - [Fixed] Issue with admin ids referring to a global variable not present for those without Infistar AH tools
 1.1
- - Added restart timer and properly aligned the bar (credit:  Salutesh)
- - Re-Added icon link for restart timer (credit: Salutesh)
+ - [Added] Restart timer and properly aligned the bar (credit:  Salutesh)
+ - [Added] Icon link for restart timer (credit: Salutesh)
 1.0
  - Initial Commit
  
 
 Instructions
 
-1.  Place all files into your mission file
+1.  Place 'addons' folder into your mission file
 
 2.  Open init.sqf and add this to the last line
 
    //Status Bar
-	if(hasInterface) then{[] execVM "fn_statusbar_with_icons.sqf"};
+	if(hasInterface) then{[] execVM "addons\Status_Bar\init_statusBar.sqf"};
 	
 3.  Open description.ext and add this to the last line
 
 	class RscTitles
 	{
 	
-	#include "statusBar.hpp"
+	#include "addons\Status_Bar\statusBar.hpp"
 	
 	};
 	
-	NOTE:  IF you already have an RscTitles section in description.ext, simply add '#include "statusBar.hpp"' between the brackets.
+	NOTE:  IF you already have an RscTitles section in description.ext, simply add '#include "addons\Status_Bar\statusBar.hpp"' between the brackets.
 	
 4.  Open scripts.txt BE filter add make the following additions
 
-~line 20  7 playableunits !=""pto: %3 | Players: %2 | FPS: %1 ", round diag_fps, count playableUnits, EPOCH_playerCrypto, mapGridPosition player];"
+	~line 20  7 playableunits !=""pto: %3 | Players: %2 | FPS: %1 ", round diag_fps, count playableUnits, EPOCH_playerCrypto, mapGridPosition player];"
 
-~line 23 7 exec !"addons\status_bar\fn_status_bar_with_icons.sqf"
+	~line 23 7 exec !"addons\status_bar\init_statusBar.sqf"
 
-5.  Open fn_status_bar_with_icons.sqf and on line 32 add the UIDs of admins whom you want to have the world space coords and server fps display.
+5.  Open init_statusBar.sqf and on line 8 add the UIDs of admins whom you want to have the world space coords and server fps display.
 	
-	"XXXXXXXXXXXXXXXXXXXXXX","XXXXXXXXXXXXXXXXXXXX","XXXXXXXXXXXXXXXXXXXXX"  //admins id goes here
+	sb_admin_list = ["XXXXXXXXXXXXXXXXXXXXXX","XXXXXXXXXXXXXXXXXXXX","XXXXXXXXXXXXXXXXXXXXX"];  //admins id goes here
+
+6.  Also in init_statusBar.sqf, select whether you want to have your admins in the list have a world space coords display or not (WSC = true/false).  This would be global for any admins in the admin list array.
 	
-6.  Profit!
+
 
 
 
