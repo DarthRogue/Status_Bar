@@ -2,15 +2,18 @@
 Player Status Bar with Icons v 1.2
 
 ChangeLog:
+
 1.2
  - [Added] Toxicity display
  - [Added] Switch to turn the world space coords on or off for admins
  - [Changed] Separated files to make editing of different bar types (player/admin/admin with world space) more clear and less prone to mistake
  - [Changed] Realigned the bar for the added toxicity display
  - [Fixed] Issue with admin ids referring to a global variable not present for those without Infistar AH tools
-1.1
+
+ 1.1
  - [Added] Restart timer and properly aligned the bar (credit:  Salutesh)
  - [Added] Icon link for restart timer (credit: Salutesh)
+
 1.0
  - Initial Commit
  
