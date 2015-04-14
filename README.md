@@ -5,6 +5,7 @@ ChangeLog:
 
 1.2
  - [Added] Toxicity display
+ - [Added] Icon for toxicity (Thanks, Nightmare!)
  - [Added] Switch to turn the world space coords on or off for admins
  - [Changed] Separated files to make editing of different bar types (player/admin/admin with world space) more clear and less prone to mistake
  - [Changed] Realigned the bar for the added toxicity display
@@ -80,3 +81,4 @@ Author: Osef (Ported to EpochMod by piX)
 	Modified by:  Salutesh
 	Description:  Added back in restart timer and properly aligned the bar
 				  Added back in restart timer icon
+				  
