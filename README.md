@@ -10,7 +10,7 @@ ChangeLog:
  - [Changed] Realigned the bar for the added toxicity display
  - [Fixed] Issue with admin ids referring to a global variable not present for those without Infistar AH tools
 
- 1.1
+1.1
  - [Added] Restart timer and properly aligned the bar (credit:  Salutesh)
  - [Added] Icon link for restart timer (credit: Salutesh)
 
