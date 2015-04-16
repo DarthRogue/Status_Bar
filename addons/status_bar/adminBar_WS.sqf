@@ -9,7 +9,7 @@ disableSerialization;
 		sleep 5;
 		//set the color values.
 		//Additional color codes can be found here:  http://html-color-codes.com/
-		_colourDefault 	= parseText "#adadad"; //set your default colour here
+		_colourDefault 	= parseText "#ADADAD"; //set your default colour here
 		_colour100 		= parseText "#336600";
 		_colour90 		= parseText "#339900";
 		_colour80 		= parseText "#33CC00";

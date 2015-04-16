@@ -10,7 +10,7 @@ disableSerialization;
 		sleep 5;
 		//set the color values.
 		//Additional color codes can be found here:  http://html-color-codes.com/
-		_colourDefault = parseText "#adadad"; //set your default colour here
+		_colourDefault  = parseText "#ADADAD"; //set your default colour here
 		_colour100 		= parseText "#336600";
 		_colour90 		= parseText "#339900";
 		_colour80 		= parseText "#33CC00";
@@ -173,7 +173,7 @@ disableSerialization;
 			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\krypto.paa' color='%10'/> %4</t> 
 			<t shadow='1' shadowColor='#000000' color='%12'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\hunger.paa' color='%12'/> %5%1</t> 
 			<t shadow='1' shadowColor='#000000' color='%13'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\thirst.paa' color='%13'/> %6%1</t> 
-			<t shadow='1' shadowColor='#000000' color='%15'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\stamina.paa' color='%16'/>%9</t>
+			<t shadow='1' shadowColor='#000000' color='%15'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\stamina.paa' color='%15'/>%9</t>
 			<t shadow='1' shadowColor='#000000' color='%19'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\toxicity.paa' color='%19'/>%20</t>
 			<t shadow='1' shadowColor='#000000' color='%14'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\energy.paa' color='%14'/>%8%1</t> 
 			<t shadow='1' shadowColor='#000000' color='%10'>FPS: %7</t>
