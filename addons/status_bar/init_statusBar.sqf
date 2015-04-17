@@ -1,3 +1,6 @@
+waitUntil {!isNuLL(uiNameSpace getVariable ["EPOCH_loadingScreen",displayNull])};
+waitUntil {isNuLL(uiNameSpace getVariable ["EPOCH_loadingScreen",displayNull])};
+
 //Status Bar Config and Startup Options
 
 //Choose Options
