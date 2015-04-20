@@ -5,17 +5,17 @@ waitUntil {isNuLL(uiNameSpace getVariable ["EPOCH_loadingScreen",displayNull])};
 
 //Choose Options
 //--------------------------------------------------------------------------------------------------------------------------------------		
-WSC = false;  //Option whether to use and display world space coords in the admin status bar (true or false)
+_WSC = false;  //Option whether to use and display world space coords in the admin status bar (true or false)
 
 
-sb_admin_list = ["76561197996565852"];	
+_sb_admin_list = ["76561197996565851"];	
 //--------------------------------------------------------------------------------------------------------------------------------------
 
 //Start the Status Bar
 	
-if ((getPlayerUID player) in sb_admin_list) then  //admins id here
+if ((getPlayerUID player) in _sb_admin_list) then  //admins id here
 { 
-	if (((getPlayerUID player) in sb_admin_list) && (WSC)) then
+	if (((getPlayerUID player) in _sb_admin_list) && (_WSC)) then
 	{
 		[] execVM "addons\status_bar\adminbar_ws.sqf";
 	}

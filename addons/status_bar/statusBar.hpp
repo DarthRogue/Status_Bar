@@ -15,7 +15,7 @@ class osefStatusBarAdmin {
 			idc = 55553;
 			x = safezoneX + safezoneW - 1.9;
 			y = safezoneY + safezoneH - 0.1;
-			w = 1.4;
+			w = 1.45;
 			h = 0.07;
 			shadow = 2;
 			colorBackground[] = { 0, 0, 0, 0.5 };  // uncomment and increase 4th number to have a background
@@ -47,7 +47,7 @@ class osefStatusBarAdminWS {
 			idc = 55554;
 			x = safezoneX + safezoneW - 2;
 			y = safezoneY + safezoneH - 0.1;
-			w = 1.6;
+			w = 1.65;
 			h = 0.07;
 			shadow = 2;
 			colorBackground[] = { 0, 0, 0, 0.5 };  // uncomment and increase 4th number to have a background
