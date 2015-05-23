@@ -19,38 +19,11 @@ ChangeLog:
  - Initial Commit
  
 
-Instructions
+Instructions:
 
-1.  Place 'addons' folder into your mission file
+See Install file included with download
 
-2.  Open init.sqf and add this to the last line
 
-   //Status Bar
-	if(hasInterface) then{[] execVM "addons\Status_Bar\init_statusBar.sqf"};
-	
-3.  Open description.ext and add this to the last line
-
-	class RscTitles
-	{
-	
-	#include "addons\Status_Bar\statusBar.hpp"
-	
-	};
-	
-	NOTE:  IF you already have an RscTitles section in description.ext, simply add '#include "addons\Status_Bar\statusBar.hpp"' between the brackets.
-	
-4.  Open scripts.txt BE filter add make the following additions
-
-	~line 20  7 playableunits !=""pto: %3 | Players: %2 | FPS: %1 ", round diag_fps, count playableUnits, EPOCH_playerCrypto, mapGridPosition player];"
-
-	~line 23 7 exec !"addons\status_bar\init_statusBar.sqf"
-
-5.  Open init_statusBar.sqf and on line 8 add the UIDs of admins whom you want to have the world space coords and server fps display.
-	
-	sb_admin_list = ["XXXXXXXXXXXXXXXXXXXXXX","XXXXXXXXXXXXXXXXXXXX","XXXXXXXXXXXXXXXXXXXXX"];  //admins id goes here
-
-6.  Also in init_statusBar.sqf, select whether you want to have your admins in the list have a world space coords display or not (WSC = true/false).  This would be global for any admins in the admin list array.
-	
 
 
 
