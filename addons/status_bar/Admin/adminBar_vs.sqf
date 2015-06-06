@@ -1,8 +1,8 @@
 waitUntil {!(isNull (findDisplay 46))};
 disableSerialization;
 
-	_rscLayer = "osefStatusBarAdmin" call BIS_fnc_rscLayer;
-	_rscLayer cutRsc["osefStatusBarAdmin","PLAIN"];
+	_rscLayer = "verySmallStatusBarAdmin" call BIS_fnc_rscLayer;
+	_rscLayer cutRsc["verySmallStatusBarAdmin","PLAIN"];
 	systemChat format["Loading Admin info...", _rscLayer];
 	[] spawn {
 
@@ -32,12 +32,12 @@ disableSerialization;
 			
 		//moved the creation of the status bar inside the loop and create it if it is null,
 		//this is to handle instance where the status bar is disappearing 
-		if(isNull ((uiNamespace getVariable "osefStatusBarAdmin")displayCtrl 55553)) then
+		if(isNull ((uiNamespace getVariable "verySmallStatusBarAdmin")displayCtrl 55553)) then
 		{
 			diag_log "statusbar is null create";
 			disableSerialization;
-			_rscLayer = "osefStatusBarAdmin" call BIS_fnc_rscLayer;
-			_rscLayer cutRsc["osefStatusBarAdmin","PLAIN"];
+			_rscLayer = "verySmallStatusBarAdmin" call BIS_fnc_rscLayer;
+			_rscLayer cutRsc["verySmallStatusBarAdmin","PLAIN"];
 		};		
 			
 		//initialize variables and set values
@@ -58,6 +58,7 @@ disableSerialization;
 		_time = (round(240-(serverTime)/60));  //edit the '240' value (60*4=240) to change the countdown timer if your server restarts are shorter or longer than 4 hour intervals
 		_hours = (floor(_time/60));
 		_minutes = (_time - (_hours * 60));
+		_players = (count playableUnits -1);
 				
 		switch(_minutes) do {
 			case 9: {_minutes = "09"};
@@ -163,21 +164,21 @@ disableSerialization;
 		//Stamina
 		_colourStamina = _colourDefault;
 
-			((uiNamespace getVariable "osefStatusBarAdmin")displayCtrl 55553)ctrlSetStructuredText parseText 
+			((uiNamespace getVariable "verySmallStatusBarAdmin")displayCtrl 55553)ctrlSetStructuredText parseText 
 			format["
-			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\players.paa' color='%10'/> %2</t>
-			<t shadow='1' shadowColor='#000000' color='%11'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\damage.paa' color='%11'/> %3%1</t> 
-			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\krypto.paa' color='%10'/> %4</t> 
-			<t shadow='1' shadowColor='#000000' color='%12'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\hunger.paa' color='%12'/> %5%1</t> 
-			<t shadow='1' shadowColor='#000000' color='%13'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\thirst.paa' color='%13'/> %6%1</t> 
-			<t shadow='1' shadowColor='#000000' color='%15'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\stamina.paa' color='%15'/>%9</t> 
-			<t shadow='1' shadowColor='#000000' color='%17'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\toxicity.paa' color='%17'/>%18</t> 
-			<t shadow='1' shadowColor='#000000' color='%14'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\energy.paa' color='%14'/>%8%1</t> 
-			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\restart.paa' color='%10'/>%19:%20</t>
+			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.7'  shadowColor='#000000' image='addons\status_bar\images\players.paa' color='%10'/> %2</t>
+			<t shadow='1' shadowColor='#000000' color='%11'><img size='1.7'  shadowColor='#000000' image='addons\status_bar\images\damage.paa' color='%11'/> %3%1</t> 
+			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.7'  shadowColor='#000000' image='addons\status_bar\images\krypto.paa' color='%10'/> %4</t> 
+			<t shadow='1' shadowColor='#000000' color='%12'><img size='1.7'  shadowColor='#000000' image='addons\status_bar\images\hunger.paa' color='%12'/> %5%1</t> 
+			<t shadow='1' shadowColor='#000000' color='%13'><img size='1.7'  shadowColor='#000000' image='addons\status_bar\images\thirst.paa' color='%13'/> %6%1</t> 
+			<t shadow='1' shadowColor='#000000' color='%15'><img size='1.7'  shadowColor='#000000' image='addons\status_bar\images\stamina.paa' color='%15'/>%9</t> 
+			<t shadow='1' shadowColor='#000000' color='%17'><img size='1.7'  shadowColor='#000000' image='addons\status_bar\images\toxicity.paa' color='%17'/>%18</t> 
+			<t shadow='1' shadowColor='#000000' color='%14'><img size='1.7'  shadowColor='#000000' image='addons\status_bar\images\energy.paa' color='%14'/>%8%1</t> 
+			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.7'  shadowColor='#000000' image='addons\status_bar\images\restart.paa' color='%10'/>%19:%20</t>
 			<t shadow='1' shadowColor='#000000' color='%10'>FPS: %7</t>
 			<t shadow='1' shadowColor='#000000' color='%10'>GRIDREF: %16</t>",
 					"%", 
-					count playableUnits,
+					_players,
 					_damage,
 					_wallet, 
 					_hunger, 
@@ -201,3 +202,6 @@ disableSerialization;
 				];
 	};
 };	
+
+// Return to Main Menu
+execVM "addons\status_bar\clearStatusBarSelection.sqf";

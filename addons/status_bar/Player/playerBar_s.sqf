@@ -1,15 +1,16 @@
 waitUntil {!(isNull (findDisplay 46))};
 disableSerialization;
 
-	_rscLayer = "osefStatusBarAdminWS" call BIS_fnc_rscLayer;
-	_rscLayer cutRsc["osefStatusBarAdminWS","PLAIN"];
-	systemChat format["Loading Admin info...", _rscLayer];
-	[] spawn {
+	_rscLayer = "smallStatusBar" call BIS_fnc_rscLayer;
+	_rscLayer cutRsc["smallStatusBar","PLAIN"];
+	systemChat format["Loading Player info...", _rscLayer];
+	[] spawn 
+	{
 
 		sleep 5;
 		//set the color values.
 		//Additional color codes can be found here:  http://html-color-codes.com/
-		_colourDefault 	= parseText "#ADADAD"; //set your default colour here
+		_colourDefault  = parseText "#ADADAD"; //set your default colour here
 		_colour100 		= parseText "#336600";
 		_colour90 		= parseText "#339900";
 		_colour80 		= parseText "#33CC00";
@@ -24,42 +25,42 @@ disableSerialization;
 		_colourDead 	= parseText "#000000";
 			
 	
-		
 	while {true} do 
 	{
-	
 		sleep 1;
-			
+				
 		//moved the creation of the status bar inside the loop and create it if it is null,
 		//this is to handle instance where the status bar is disappearing 
-		if(isNull ((uiNamespace getVariable "osefStatusBarAdminWS")displayCtrl 55554)) then
+		if(isNull ((uiNamespace getVariable "smallStatusBar")displayCtrl 55560)) then
 		{
 			diag_log "statusbar is null create";
 			disableSerialization;
-			_rscLayer = "osefStatusBarAdminWS" call BIS_fnc_rscLayer;
-			_rscLayer cutRsc["osefStatusBarAdminWS","PLAIN"];
+			_rscLayer = "smallStatusBar" call BIS_fnc_rscLayer;
+			_rscLayer cutRsc["smallStatusBar","PLAIN"];
 		};		
-			
+		
 		//initialize variables and set values
 		_unit = _this select 0;
 		_damage = round ((1 - (damage player)) * 100);
+		//_damage = (round(_damage * 100));
 		_hunger = round((EPOCH_playerHunger/5000) * 100);
 		_thirst = round((EPOCH_playerThirst/2500) * 100);
 		_wallet = EPOCH_playerCrypto;
 		_stamina = round(EPOCH_playerStamina * 100) / 100;
-		_energy = round(EPOCH_playerEnergy);
 		_toxPercent = round (EPOCH_playerToxicity);
+		_energy = round(EPOCH_playerEnergy);
 		_energyPercent =  floor((_energy / 2500 ) * 100);
-		_serverFPS = if (typeName EPOCH_diag_fps == "SCALAR") then [{EPOCH_diag_fps},{"MANIPULATED"}],
-		_pos = getPosATL player;  //switch to this below if you want to have world space coords displayed instead of gridref
-		_dir = getDir (vehicle player);
-		_grid = mapGridPosition  player; _xx = (format[_grid]) select  [0,3]; 
+		_fps = format["%1", diag_fps];
+		_grid = mapGridPosition  player; 
+		_xx = (format[_grid]) select  [0,3]; 
 		_yy = (format[_grid]) select  [3,3];  
 		_time = (round(240-(serverTime)/60));  //edit the '240' value (60*4=240) to change the countdown timer if your server restarts are shorter or longer than 4 hour intervals
 		_hours = (floor(_time/60));
 		_minutes = (_time - (_hours * 60));
-				
-		switch(_minutes) do {
+		_players = (count playableUnits -1);
+		
+		
+		switch(_minutes) do	{
 			case 9: {_minutes = "09"};
 			case 8: {_minutes = "08"};
 			case 7: {_minutes = "07"};
@@ -71,6 +72,7 @@ disableSerialization;
 			case 1: {_minutes = "01"};
 			case 0: {_minutes = "00"};
 		};
+						
 		
 		//Colour coding
 		//Damage
@@ -90,7 +92,6 @@ disableSerialization;
 			case((_damage >= 1) && (_damage < 10)) : {_colourDamage =  _colour0;};
 			case(_damage < 1) : {_colourDamage =  _colourDead;};
 		};
-		
 		
 		//Hunger
 		_colourHunger = _colourDefault;
@@ -112,6 +113,7 @@ disableSerialization;
 		//Thirst
 		_colourThirst = _colourDefault;		
 		switch true do{
+		
 			case(_thirst >= 100) : {_colourThirst = _colour100;};
 			case((_thirst >= 90) && (_thirst < 100)) :  {_colourThirst =  _colour90;};
 			case((_thirst >= 80) && (_thirst < 90)) :  {_colourThirst =  _colour80;};
@@ -129,6 +131,7 @@ disableSerialization;
 		//Energy
 		_colourEnergy = _colourDefault;
 		switch true do{
+		
 			case(_energyPercent >= 100) : {_colourEnergy = _colour100;};
 			case((_energyPercent >= 90) && (_energyPercent < 100)) :  {_colourEnergy =  _colour90;};
 			case((_energyPercent >= 80) && (_energyPercent < 90)) :  {_colourEnergy =  _colour80;};
@@ -164,39 +167,46 @@ disableSerialization;
 		_colourStamina = _colourDefault;
 		
 		//display the information 
-		((uiNamespace getVariable "osefStatusBarAdminWS")displayCtrl 55554)ctrlSetStructuredText parseText 
+		((uiNamespace getVariable "smallStatusBar")displayCtrl 55560)ctrlSetStructuredText parseText 
 			format["
 			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\players.paa' color='%10'/> %2</t>
 			<t shadow='1' shadowColor='#000000' color='%11'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\damage.paa' color='%11'/> %3%1</t> 
 			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\krypto.paa' color='%10'/> %4</t> 
 			<t shadow='1' shadowColor='#000000' color='%12'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\hunger.paa' color='%12'/> %5%1</t> 
 			<t shadow='1' shadowColor='#000000' color='%13'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\thirst.paa' color='%13'/> %6%1</t> 
-			<t shadow='1' shadowColor='#000000' color='%15'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\stamina.paa' color='%15'/>%9</t> 
-			<t shadow='1' shadowColor='#000000' color='%18'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\toxicity.paa' color='%18'/>%19</t> 
+			<t shadow='1' shadowColor='#000000' color='%15'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\stamina.paa' color='%15'/>%9</t>
+			<t shadow='1' shadowColor='#000000' color='%19'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\toxicity.paa' color='%19'/>%20</t>
 			<t shadow='1' shadowColor='#000000' color='%14'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\energy.paa' color='%14'/>%8%1</t> 
 			<t shadow='1' shadowColor='#000000' color='%10'>FPS: %7</t>
-			<t shadow='1' shadowColor='#000000' color='%10'>POS: %16</t>
-			<t shadow='1' shadowColor='#000000' color='%10'>DIR: %17</t>",
+			<t shadow='1' shadowColor='#000000' color='%10'>GRIDREF: %16</t>
+			<t shadow='1' shadowColor='#000000' color='%10'><img size='1.6'  shadowColor='#000000' image='addons\status_bar\images\restart.paa' color='%10'/>%17:%18</t>",
 					"%", 
-					count playableUnits,
+					_players,
 					_damage,
 					_wallet, 
 					_hunger, 
 					_thirst, 
-					_serverFPS, 
+					round diag_fps, 
 					_energyPercent, 
-					_stamina, 
+					_stamina,
 					_colourDefault,
 					_colourDamage,
 					_colourHunger,
 					_colourThirst,
 					_colourEnergy,
 					_colourStamina,
-					_pos, 
-					_dir,
+					format["%1/%2",_xx,_yy],
+					_hours,
+					_minutes,
 					_colourToxicity,
 					_toxPercent
+					
 				];
+		
+		
 				
-	};
+			
+	}; 
 };
+// Return to Main Menu
+execVM "addons\status_bar\clearStatusBarSelection.sqf";

@@ -3,6 +3,9 @@ Player Status Bar with Icons v 1.2
 
 ChangeLog:
 
+1.3
+ - [Added] Ability for players to select a different size and position for the status bar based on their Interface Size setting in A3 Video options
+
 1.2
  - [Added] Toxicity display
  - [Added] Icon for toxicity (Thanks, Nightmare!)
