@@ -3,6 +3,10 @@ Player Status Bar with Icons v 1.2
 
 ChangeLog:
 
+1.35
+ - [Changed] Status bar will now automatically resize based on player interface size
+ - [Removed] Player size slection via addActions
+
 1.3
  - [Added] Ability for players to select a different size and position for the status bar based on their Interface Size setting in A3 Video options
 
