@@ -21,7 +21,7 @@ class statusBar {
 			shadow = 1;
 			colorBackground[] = { 0, 0, 0, 0.5 }; // make the last number in the array 0 to get rid of the background
 			font = "PuristaSemibold";
-			size = "0.02 * safezoneH"
+			size = "0.02 * safezoneH";
 			type = 13;
 			style = 2;
 			text="loading player stats ...";
