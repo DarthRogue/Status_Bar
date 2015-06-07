@@ -1,5 +1,5 @@
 # Status_Bar
-Player Status Bar with Icons v 1.2
+Player Status Bar with Icons v 1.35
 
 ChangeLog:
 
