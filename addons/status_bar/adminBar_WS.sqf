@@ -148,7 +148,7 @@ disableSerialization;
 		_colourToxicity = _colourDefault;
 		switch true do{
 			case(_toxPercent >= 100) : {_colourToxicity = _colourDead;};
-			case((_toxPercent >= 90) && (_toxPercent < 100)) :  {_colourToxicity =  _colour00;};
+			case((_toxPercent >= 90) && (_toxPercent < 100)) :  {_colourToxicity =  _colour0;};
 			case((_toxPercent >= 80) && (_toxPercent < 90)) :  {_colourToxicity =  _colour10;};
 			case((_toxPercent >= 70) && (_toxPercent < 80)) :  {_colourToxicity =  _colour20;};
 			case((_toxPercent >= 60) && (_toxPercent < 70)) :  {_colourToxicity =  _colour30;};
