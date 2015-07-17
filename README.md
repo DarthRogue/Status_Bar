@@ -1,11 +1,14 @@
 # Status_Bar
-Player Status Bar with Icons v 1.35
+Player Status Bar with Icons v 1.36
 
 ChangeLog:
 
+1.36
+ - [Fixed] Bug that caused toxicity colouring to not display correctly when toxicity levels where at or above 90%
+
 1.35
  - [Changed] Status bar will now automatically resize based on player interface size
- - [Removed] Player size slection via addActions
+ - [Removed] Player size selection via addActions
 
 1.3
  - [Added] Ability for players to select a different size and position for the status bar based on their Interface Size setting in A3 Video options
